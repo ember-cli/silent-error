@@ -29,6 +29,24 @@ describe('SilentError', function() {
     });
   });
 
+  describe('with SILENT_ERROR set', function() {
+    beforeEach(function() {
+      delete process.env.SILENT_ERROR;
+    });
+
+    it('should suppress stack when false', function() {
+      process.env.SILENT_ERROR = 'verbose';
+      error = new SilentError();
+      expect(!error.suppressStacktrace, 'suppressesStacktrace should be false');
+    });
+
+    it('shouldn\'t suppress stack when unset', function() {
+      delete process.env.SILENT_ERROR;
+      error = new SilentError();
+      expect(error.suppressStacktrace, 'suppressesStacktrace should be true');
+    });
+  });
+
   describe('debugOrThrow', function() {
     it('throws non SilentError', function() {
       expect(function() {
